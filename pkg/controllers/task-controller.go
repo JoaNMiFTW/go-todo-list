@@ -41,8 +41,8 @@ func CreateTask(w http.ResponseWriter, r *http.Request) {
 	CreateTask := &models.Task{}
 	utils.ParseBody(r, CreateTask)
 
-	b := CreateTask.CreateTask()
-	res, _ := json.Marshal(b)
+	t := CreateTask.CreateTask()
+	res, _ := json.Marshal(t)
 
 	w.Header().Set("Content-Type", "pkglication/json")
 	w.WriteHeader(http.StatusOK)
@@ -70,22 +70,22 @@ func UpdateTask(w http.ResponseWriter, r *http.Request) {
 	var updateTask = &models.Task{}
 	utils.ParseBody(r, updateTask)
 	vars := mux.Vars(r)
-	bookId := vars["bookId"]
-	ID, err := strconv.ParseInt(bookId, 0, 0)
+	taskId := vars["taskId"]
+	ID, err := strconv.ParseInt(taskId, 0, 0)
 	if err != nil {
 		fmt.Println("Error while parsing")
 	}
-	bookDetails, db := models.GetTaskById(ID)
+	taskDetails, db := models.GetTaskById(ID)
 	if updateTask.Title != "" {
-		bookDetails.Title = updateTask.Title
+		taskDetails.Title = updateTask.Title
 	}
 	if updateTask.Description != "" {
-		bookDetails.Description = updateTask.Description
+		taskDetails.Description = updateTask.Description
 	}
 
-	db.Save(&bookDetails)
+	db.Save(&taskDetails)
 
-	res, _ := json.Marshal(bookDetails)
+	res, _ := json.Marshal(taskDetails)
 
 	w.Header().Set("Content-Type", "pkglication/json")
 	w.WriteHeader(http.StatusOK)
